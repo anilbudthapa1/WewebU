@@ -17,6 +17,7 @@ import Testimonials from './components/Testimonials'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import ScrollProgress from './components/ScrollProgress'
+import WhatsAppButton from './components/WhatsAppButton'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -99,6 +100,7 @@ export default function App() {
             <Contact />
           </main>
           <Footer />
+          <WhatsAppButton />
         </>
       )}
     </ThemeContext.Provider>
