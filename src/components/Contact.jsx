@@ -26,10 +26,13 @@ export default function Contact() {
   const submit = async e => {
     e.preventDefault()
     setStatus('loading')
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 8000)
     try {
       const res = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        signal: controller.signal,
         body: JSON.stringify({
           access_key: WEB3FORMS_KEY,
           from_name: 'WeWebU Website',
@@ -38,11 +41,11 @@ export default function Contact() {
           email: form.email,
           service: form.service || 'Not specified',
           message: form.message,
-          // Auto-reply to the customer
           autoresponse: AUTO_REPLY.replace('{name}', form.name),
           botcheck: '',
         }),
       })
+      clearTimeout(timeout)
       const data = await res.json()
       if (data.success) {
         setStatus('success')
@@ -50,6 +53,7 @@ export default function Contact() {
         setStatus('error')
       }
     } catch {
+      clearTimeout(timeout)
       setStatus('error')
     }
   }
