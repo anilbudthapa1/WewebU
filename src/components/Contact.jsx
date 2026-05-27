@@ -3,16 +3,16 @@ import { motion } from 'framer-motion'
 import { Mail, MapPin, Phone, Send, CheckCircle } from 'lucide-react'
 
 export default function Contact() {
-  const [form, setForm]   = useState({ name: '', email: '', service: '', message: '' })
+  const [form, setForm]       = useState({ name: '', email: '', service: '', message: '' })
   const [loading, setLoading] = useState(false)
-  const [done, setDone]   = useState(false)
+  const [done, setDone]       = useState(false)
 
   const handle = e => setForm(f => ({ ...f, [e.target.name]: e.target.value }))
 
   const submit = async e => {
     e.preventDefault()
     setLoading(true)
-    // Simulate submission — replace with fetch() to Formspree / your API
+    // TODO: Replace with fetch() POST to your preferred endpoint (Formspree / Netlify Forms / custom API)
     await new Promise(r => setTimeout(r, 1600))
     setLoading(false)
     setDone(true)
@@ -36,25 +36,26 @@ export default function Contact() {
             <p className="contact__info-text">
               Tell us about your project and we'll get back to you within 24 hours with a free, no-obligation quote.
             </p>
-            <div className="contact__detail">
-              <div className="contact__detail-icon"><Mail size={16} /></div>
-              hello@wewebu.com.au
-            </div>
+
             <div className="contact__detail">
               <div className="contact__detail-icon"><Phone size={16} /></div>
-              +61 XXX XXX XXX
+              <a href="tel:0421688186">0421 688 186</a>
+            </div>
+            <div className="contact__detail">
+              <div className="contact__detail-icon"><Mail size={16} /></div>
+              <a href="mailto:contact@wewebu.com.au">contact@wewebu.com.au</a>
             </div>
             <div className="contact__detail">
               <div className="contact__detail-icon"><MapPin size={16} /></div>
-              Australia-wide · Remote-first
+              5 Eve Ct, Springvale VIC 3171, Australia
             </div>
 
             {/* Trust badges */}
-            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginTop: '2.5rem' }}>
-              {['Free Quote', '24h Response', 'No Contracts', 'Aussie Team'].map(b => (
+            <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginTop: '2.5rem' }}>
+              {['Free Quote', '24h Response', 'No Lock-in Contracts', 'Australian Owned'].map(b => (
                 <span key={b} style={{
                   fontSize: '0.78rem', fontWeight: 600, padding: '0.35rem 0.85rem',
-                  background: 'rgba(99,102,241,0.08)', border: '1px solid var(--border)',
+                  background: 'rgba(99,102,241,0.07)', border: '1px solid var(--border)',
                   borderRadius: '100px', color: 'var(--primary)'
                 }}>{b}</span>
               ))}
@@ -71,42 +72,54 @@ export default function Contact() {
             <div className="contact__form">
               {done ? (
                 <div className="form-success">
-                  <div className="form-success-icon"><CheckCircle size={28} /></div>
+                  <motion.div
+                    className="form-success-icon"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: 'spring', stiffness: 200 }}
+                  >
+                    <CheckCircle size={28} />
+                  </motion.div>
                   <h3 style={{ fontFamily: 'Space Grotesk', fontWeight: 700, marginBottom: '0.5rem' }}>Message Sent!</h3>
                   <p style={{ color: 'var(--muted)', fontSize: '0.9rem' }}>
-                    Thanks for reaching out. We'll get back to you within 24 hours.
+                    Thanks for reaching out. We'll be in touch within 24 hours.
                   </p>
                 </div>
               ) : (
                 <form onSubmit={submit}>
                   <div className="form-row">
                     <div className="form-group">
-                      <label className="form-label">Your Name</label>
+                      <label className="form-label">Your Name *</label>
                       <input className="form-input" name="name" value={form.name}
-                        onChange={handle} required placeholder="John Smith" />
+                        onChange={handle} required placeholder="e.g. John Smith" />
                     </div>
                     <div className="form-group">
-                      <label className="form-label">Email</label>
+                      <label className="form-label">Email Address *</label>
                       <input className="form-input" name="email" type="email" value={form.email}
-                        onChange={handle} required placeholder="john@company.com" />
+                        onChange={handle} required placeholder="john@company.com.au" />
                     </div>
                   </div>
                   <div className="form-group">
                     <label className="form-label">Service Interested In</label>
                     <select className="form-select" name="service" value={form.service} onChange={handle}>
                       <option value="">Select a service…</option>
-                      <option value="website">Website Design & Development</option>
+                      <option value="website">Website Design &amp; Development</option>
                       <option value="webapp">Web Application Development</option>
                       <option value="google">Google Business Promotion</option>
-                      <option value="other">Other / Not Sure</option>
+                      <option value="other">Other / Not Sure Yet</option>
                     </select>
                   </div>
                   <div className="form-group">
-                    <label className="form-label">Tell us about your project</label>
+                    <label className="form-label">Tell us about your project *</label>
                     <textarea className="form-textarea" name="message" value={form.message}
                       onChange={handle} required
-                      placeholder="What are you trying to achieve? Timeline? Budget range?" />
+                      placeholder="What do you need? What's your timeline and budget range?" />
                   </div>
+                  <p style={{ fontSize: '0.75rem', color: 'var(--muted)', marginBottom: '1rem', lineHeight: 1.5 }}>
+                    By submitting this form you agree to our{' '}
+                    <span style={{ color: 'var(--primary)' }}>Privacy Policy</span>.
+                    Your information is collected under the Privacy Act 1988 (Cth) and used only to respond to your enquiry.
+                  </p>
                   <button className="form-submit" type="submit" disabled={loading}>
                     {loading ? (
                       <>
@@ -126,7 +139,6 @@ export default function Contact() {
           </motion.div>
         </div>
       </div>
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </section>
   )
 }

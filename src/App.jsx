@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, createContext, useContext } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
@@ -20,9 +20,24 @@ import ScrollProgress from './components/ScrollProgress'
 
 gsap.registerPlugin(ScrollTrigger)
 
+// ── Theme Context ─────────────────────────────────────
+export const ThemeContext = createContext({ theme: 'dark', toggle: () => {} })
+export const useTheme = () => useContext(ThemeContext)
+
 export default function App() {
   const [loaded, setLoaded] = useState(false)
-  const lenisRef = useRef(null)
+  const [theme, setTheme]   = useState(() => localStorage.getItem('ww-theme') || 'dark')
+  const lenisRef   = useRef(null)
+  const glowRef    = useRef(null)
+  const mousePos   = useRef({ x: 0, y: 0 })
+
+  // Apply theme to <html>
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme)
+    localStorage.setItem('ww-theme', theme)
+  }, [theme])
+
+  const toggleTheme = () => setTheme(t => t === 'dark' ? 'light' : 'dark')
 
   // Lenis smooth scroll
   useEffect(() => {
@@ -33,37 +48,43 @@ export default function App() {
       smoothWheel: true,
     })
     lenisRef.current = lenis
-
     lenis.on('scroll', ScrollTrigger.update)
-
     const raf = time => { lenis.raf(time); requestAnimationFrame(raf) }
     const rafId = requestAnimationFrame(raf)
-
     gsap.ticker.lagSmoothing(0)
-
-    return () => {
-      cancelAnimationFrame(rafId)
-      lenis.destroy()
-    }
+    return () => { cancelAnimationFrame(rafId); lenis.destroy() }
   }, [])
 
-  // Unlock scroll after preloader
+  // Mouse glow follower
   useEffect(() => {
-    if (loaded) {
-      document.body.style.overflow = ''
-    } else {
-      document.body.style.overflow = 'hidden'
+    const glow = glowRef.current
+    if (!glow) return
+    let raf
+    const move = e => { mousePos.current = { x: e.clientX, y: e.clientY } }
+    const loop = () => {
+      glow.style.left = mousePos.current.x + 'px'
+      glow.style.top  = mousePos.current.y + 'px'
+      raf = requestAnimationFrame(loop)
     }
+    raf = requestAnimationFrame(loop)
+    window.addEventListener('mousemove', move, { passive: true })
+    return () => { cancelAnimationFrame(raf); window.removeEventListener('mousemove', move) }
+  }, [loaded])
+
+  // Lock scroll during preloader
+  useEffect(() => {
+    document.body.style.overflow = loaded ? '' : 'hidden'
   }, [loaded])
 
   return (
-    <>
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
       <AnimatePresence mode="wait">
         {!loaded && <Preloader onComplete={() => setLoaded(true)} key="preloader" />}
       </AnimatePresence>
 
       {loaded && (
         <>
+          <div className="mouse-glow" ref={glowRef} />
           <Cursor />
           <ScrollProgress />
           <Navbar />
@@ -80,6 +101,6 @@ export default function App() {
           <Footer />
         </>
       )}
-    </>
+    </ThemeContext.Provider>
   )
 }

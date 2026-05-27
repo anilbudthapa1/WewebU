@@ -1,7 +1,24 @@
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
+import { useTheme } from '../App'
 
 const links = ['Services', 'About', 'Process', 'Work', 'Contact']
+
+function ThemeToggle() {
+  const { theme, toggleTheme } = useTheme()
+  return (
+    <button
+      className="theme-toggle"
+      onClick={toggleTheme}
+      aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+      title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+    >
+      <div className="theme-toggle__thumb">
+        {theme === 'dark' ? '🌙' : '☀️'}
+      </div>
+    </button>
+  )
+}
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
@@ -39,21 +56,30 @@ export default function Navbar() {
               ))}
             </div>
 
-            <a className="navbar__cta btn-primary" href="#contact" onClick={e => { e.preventDefault(); scrollTo('contact') }}>
-              Get a Quote
-            </a>
-
-            <button className="navbar__hamburger" onClick={() => setOpen(v => !v)} aria-label="menu">
-              <span style={{ transform: open ? 'rotate(45deg) translateY(7px)' : 'none' }} />
-              <span style={{ opacity: open ? 0 : 1 }} />
-              <span style={{ transform: open ? 'rotate(-45deg) translateY(-7px)' : 'none' }} />
-            </button>
+            <div className="navbar__right">
+              <ThemeToggle />
+              <a
+                className="navbar__cta"
+                href="#contact"
+                onClick={e => { e.preventDefault(); scrollTo('contact') }}
+              >
+                Get a Quote
+              </a>
+              <button className="navbar__hamburger" onClick={() => setOpen(v => !v)} aria-label="menu">
+                <span style={{ transform: open ? 'rotate(45deg) translateY(7px)' : 'none' }} />
+                <span style={{ opacity: open ? 0 : 1 }} />
+                <span style={{ transform: open ? 'rotate(-45deg) translateY(-7px)' : 'none' }} />
+              </button>
+            </div>
           </div>
         </div>
       </motion.nav>
 
       {/* Mobile menu */}
       <div className={`navbar__mobile${open ? ' open' : ''}`}>
+        <div style={{ position: 'absolute', top: '1.5rem', right: '1.5rem' }}>
+          <ThemeToggle />
+        </div>
         {links.map((l, i) => (
           <motion.a
             key={l}
