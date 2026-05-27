@@ -36,16 +36,35 @@
 
 /* --- Reset --- */
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior:smooth; -webkit-font-smoothing:antialiased; }
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  background-color: #080b14; /* hard fallback if variables fail */
+}
 body {
   font-family: var(--font-body);
   font-size: 1rem;
   line-height: 1.7;
+  color: #eef2ff;               /* hard fallback */
   color: var(--text);
+  background-color: #080b14;    /* hard fallback */
   background: var(--bg);
   overflow-x: hidden;
 }
 body.is-loading { overflow: hidden; }
+
+/* CSS-only preloader fallback — hides after 4 s even if JS never runs */
+#preloader {
+  animation: plCssFallback 0.5s ease 4s forwards;
+}
+@keyframes plCssFallback {
+  to { transform: translateY(-105%); pointer-events: none; }
+}
+/* Remove overflow lock after preloader would have cleared */
+body.is-loading {
+  animation: bodyUnlock 0s linear 4.6s forwards;
+}
+@keyframes bodyUnlock { to { overflow: auto; } }
 
 img  { max-width:100%; height:auto; display:block; }
 a    { text-decoration:none; color:inherit; }

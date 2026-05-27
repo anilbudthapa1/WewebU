@@ -5,25 +5,29 @@
 
 'use strict';
 
-/* ---- Initialise GSAP plugins ---- */
-gsap.registerPlugin(ScrollTrigger);
+/* ---- Guard: skip GSAP/Lenis if CDNs failed to load (e.g. offline in Termux) ---- */
+const HAS_GSAP  = typeof gsap  !== 'undefined';
+const HAS_LENIS = typeof Lenis !== 'undefined';
+
+if (HAS_GSAP) gsap.registerPlugin(ScrollTrigger);
 
 /* =============================================
    1. LENIS SMOOTH SCROLL
    ============================================= */
-const lenis = new Lenis({
-  duration: 1.2,
-  easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-  smoothWheel: true,
-  wheelMultiplier: 0.9,
-});
-
-function raf(time) {
-  lenis.raf(time);
-  ScrollTrigger.update();
-  requestAnimationFrame(raf);
+let lenis = null;
+if (HAS_LENIS) {
+  lenis = new Lenis({
+    duration: 1.2,
+    easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    smoothWheel: true,
+    wheelMultiplier: 0.9,
+  });
+  (function raf(time) {
+    lenis.raf(time);
+    if (HAS_GSAP) ScrollTrigger.update();
+    requestAnimationFrame(raf);
+  })();
 }
-requestAnimationFrame(raf);
 
 /* =============================================
    2. PRELOADER
@@ -42,16 +46,18 @@ requestAnimationFrame(raf);
       pct.textContent = '100%';
 
       setTimeout(() => {
-        gsap.to(preloader, {
-          yPercent: -105,
-          duration: 0.85,
-          ease: 'power3.inOut',
-          onComplete() {
-            preloader.style.display = 'none';
-            document.body.classList.remove('is-loading');
-            startHeroAnim();
-          },
-        });
+        const done = () => {
+          preloader.style.display = 'none';
+          document.body.classList.remove('is-loading');
+          startHeroAnim();
+        };
+        if (HAS_GSAP) {
+          gsap.to(preloader, { yPercent: -105, duration: 0.85, ease: 'power3.inOut', onComplete: done });
+        } else {
+          preloader.style.transition = 'transform 0.7s ease';
+          preloader.style.transform  = 'translateY(-105%)';
+          setTimeout(done, 750);
+        }
       }, 250);
       return;
     }
@@ -66,62 +72,36 @@ requestAnimationFrame(raf);
    3. HERO ENTRANCE ANIMATION
    ============================================= */
 function startHeroAnim() {
+  // Always make hero content visible regardless of GSAP
+  const showAll = () => {
+    ['.hero-eyebrow','.hero-sub','.hero-ctas','.hero-stats','.scroll-hint'].forEach(sel => {
+      document.querySelectorAll(sel).forEach(el => el.style.opacity = '1');
+    });
+    document.querySelectorAll('.tinner').forEach(el => el.style.transform = 'translateY(0)');
+    document.querySelectorAll('.hv-card').forEach(el => el.style.opacity = '1');
+    document.querySelectorAll('[data-target]').forEach(animateCount);
+  };
+
+  if (!HAS_GSAP) { showAll(); return; }
+
   const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-
-  // Navbar
   tl.from('.navbar', { yPercent: -120, opacity: 0, duration: 0.7 })
-
-  // Scroll progress bar
     .from('#scrollProgress', { scaleX: 0, duration: 0 }, '<')
-
-  // Eyebrow
     .to('.hero-eyebrow', { opacity: 1, y: 0, duration: 0.55 }, '-=0.2')
-
-  // Title lines — slide up from inside overflow:hidden containers
-    .to('.tinner', {
-      yPercent: 0,
-      stagger: 0.13,
-      duration: 0.9,
-      ease: 'power3.out',
-    }, '-=0.3')
-
-  // Underline draw
-    .to('.underline-word::after', { scaleX: 1, duration: 0.7, ease: 'power2.out' }, '-=0.2')
-
-  // Sub + CTAs + stats
+    .to('.tinner', { yPercent: 0, stagger: 0.13, duration: 0.9, ease: 'power3.out' }, '-=0.3')
     .to('.hero-sub',   { opacity: 1, y: 0, duration: 0.6 }, '-=0.5')
     .to('.hero-ctas',  { opacity: 1, y: 0, duration: 0.5 }, '-=0.4')
     .to('.hero-stats', { opacity: 1, y: 0, duration: 0.5 }, '-=0.35')
-
-  // Floating cards
-    .to('.hv-card', {
-      opacity: 1,
-      scale: 1,
-      stagger: 0.12,
-      duration: 0.65,
-      ease: 'back.out(1.6)',
-    }, '-=0.4')
-
-  // Scroll hint
+    .to('.hv-card',    { opacity: 1, scale: 1, stagger: 0.12, duration: 0.65, ease: 'back.out(1.6)' }, '-=0.4')
     .to('.scroll-hint', { opacity: 0.4, duration: 0.5 }, '-=0.1');
+  tl.call(() => document.querySelectorAll('[data-target]').forEach(animateCount));
 
-  // Fire counters after hero is up
-  tl.call(() => {
-    document.querySelectorAll('[data-target]').forEach(animateCount);
-  });
-
-  // Underline trick: GSAP can't animate pseudo-elements, so we use a real element override
-  // (the CSS handles .underline-word::after scaleX:0 → 1 via GSAP setProperty workaround)
-  // For cross-browser safety, inject a real <span> underline into the DOM
+  // Real <span> underline (GSAP can't animate pseudo-elements)
   const uw = document.querySelector('.underline-word');
   if (uw && !uw.querySelector('.uw-line')) {
     const line = document.createElement('span');
     line.className = 'uw-line';
-    line.style.cssText = `
-      display:block; position:absolute; bottom:-4px; left:0; right:0;
-      height:4px; background:var(--grad); border-radius:2px;
-      transform:scaleX(0); transform-origin:left;
-    `;
+    line.style.cssText = 'display:block;position:absolute;bottom:-4px;left:0;right:0;height:4px;background:var(--grad);border-radius:2px;transform:scaleX(0);transform-origin:left;';
     uw.style.position = 'relative';
     uw.appendChild(line);
     gsap.to(line, { scaleX: 1, duration: 0.8, ease: 'power2.out', delay: 1.4 });
@@ -131,16 +111,19 @@ function startHeroAnim() {
 /* =============================================
    4. SCROLL PROGRESS BAR
    ============================================= */
-gsap.to('#scrollProgress', {
-  scaleX: 1,
-  ease: 'none',
-  scrollTrigger: { scrub: 0.3, start: 'top top', end: 'bottom bottom' },
-});
+if (HAS_GSAP) {
+  gsap.to('#scrollProgress', {
+    scaleX: 1,
+    ease: 'none',
+    scrollTrigger: { scrub: 0.3, start: 'top top', end: 'bottom bottom' },
+  });
+}
 
 /* =============================================
    5. SCROLL-TRIGGERED SECTION ANIMATIONS
    ============================================= */
 function initScrollAnims() {
+  if (!HAS_GSAP) return; // skip all scroll animations if GSAP not loaded
 
   /* Section headers (.js-reveal) */
   document.querySelectorAll('.js-reveal').forEach(el => {
@@ -345,6 +328,7 @@ function initCursor() {
    8. MAGNETIC BUTTONS
    ============================================= */
 function initMagnetic() {
+  if (!HAS_GSAP) return;
   document.querySelectorAll('.magnetic').forEach(btn => {
     btn.addEventListener('mousemove', e => {
       const r = btn.getBoundingClientRect();
@@ -362,7 +346,7 @@ function initMagnetic() {
    9. 3-D CARD TILT
    ============================================= */
 function initTilt() {
-  if (window.matchMedia('(pointer:coarse)').matches) return;
+  if (!HAS_GSAP || window.matchMedia('(pointer:coarse)').matches) return;
 
   document.querySelectorAll('[data-tilt]').forEach(card => {
     card.addEventListener('mousemove', e => {
