@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useTheme } from '../App'
 
-const links = ['Services', 'About', 'Process', 'Work', 'Contact']
+const links = ['Services', 'About', 'Work', 'Products', 'Contact']
 
 function ThemeToggle() {
   const { theme, toggleTheme } = useTheme()

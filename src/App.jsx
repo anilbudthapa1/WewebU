@@ -13,6 +13,7 @@ import Services from './components/Services'
 import WhyUs from './components/WhyUs'
 import Process from './components/Process'
 import Work from './components/Work'
+import Products from './components/Products'
 import Testimonials from './components/Testimonials'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
@@ -96,6 +97,7 @@ export default function App() {
             <WhyUs />
             <Process />
             <Work />
+            <Products />
             <Testimonials />
             <Contact />
           </main>
