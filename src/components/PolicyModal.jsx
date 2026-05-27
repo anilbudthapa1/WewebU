@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X } from 'lucide-react'
 
-const UPDATED = 'Last updated: 27 May 2026'
+const UPDATED = 'Last updated: 27 May 2026 · Compliant with Privacy and Other Legislation Amendment Act 2024'
 const COMPANY  = 'WeWebU'
 const ADDRESS  = '5 Eve Ct, Springvale VIC 3171, Australia'
 const EMAIL    = 'contact@wewebu.com.au'
@@ -71,16 +71,26 @@ const policies = {
 
         <h2>6. Data Security</h2>
         <p>
-          We take reasonable steps to protect your personal information from misuse, interference, loss,
-          and unauthorised access using physical, electronic, and procedural safeguards. Our website uses
-          HTTPS/SSL encryption. However, no internet transmission is 100% secure.
+          We take reasonable steps — including technical and organisational measures as required by the
+          <em>Privacy and Other Legislation Amendment Act 2024 (Cth)</em> — to protect your personal information
+          from misuse, interference, loss, and unauthorised access. Our website uses HTTPS/SSL encryption.
+          Access to personal data is restricted to authorised personnel only. However, no internet transmission
+          is 100% secure.
+        </p>
+        <p>
+          We retain personal information only as long as necessary for the purpose it was collected (generally
+          2 years for enquiry/contact records) or as required by law, then securely destroy or de-identify it.
         </p>
 
         <h2>7. Cookies & Analytics</h2>
         <p>
-          Our website may use cookies and analytics tools (such as Google Analytics) to understand how
-          visitors use our site. You can disable cookies in your browser settings; however, some features
-          may not function properly. We do not use cookies to track you across other websites for advertising.
+          Our website may use cookies and analytics tools including <strong>Google Analytics</strong> (operated
+          by Google LLC, USA). This constitutes an overseas disclosure of your IP address and usage data to the
+          United States. Google's handling of this data is governed by{' '}
+          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" style={{color:'var(--primary)'}}>Google's Privacy Policy</a>.
+          You can opt out via{' '}
+          <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer" style={{color:'var(--primary)'}}>Google's opt-out tool</a>{' '}
+          or disable cookies in your browser settings.
         </p>
 
         <h2>8. Access and Correction</h2>
@@ -135,7 +145,14 @@ const policies = {
           <li>The deposit may be refunded in full if we have not yet commenced work and you cancel within <strong>48 hours</strong> of payment.</li>
         </ul>
 
-        <h2>3. Milestone-Based Projects</h2>
+        <h2>3. Our Policy Does Not Exclude Your ACL Rights</h2>
+        <p>
+          Nothing in this policy excludes, restricts, or modifies any right or remedy you have under the
+          <strong> Australian Consumer Law (ACL)</strong>, Schedule 2 of the <em>Competition and Consumer Act
+          2010 (Cth)</em>. These statutory consumer guarantees apply automatically and cannot be waived.
+        </p>
+
+        <h2>4. Milestone-Based Projects</h2>
         <p>For larger projects structured around milestones:</p>
         <ul>
           <li>Each milestone payment covers the work completed in that phase</li>
@@ -144,14 +161,14 @@ const policies = {
           <li>Any unused funds paid in advance for future milestones will be refunded within 14 business days</li>
         </ul>
 
-        <h2>4. Monthly Services (SEO, Google Business, Maintenance)</h2>
+        <h2>5. Monthly Services (SEO, Google Business, Maintenance)</h2>
         <ul>
           <li>Monthly services may be cancelled with <strong>30 days written notice</strong> to {EMAIL}</li>
           <li>The current month's fee is non-refundable after work for that month has commenced</li>
           <li>No refunds are provided for partial months unless we are in breach of our obligations</li>
         </ul>
 
-        <h2>5. Requesting a Refund</h2>
+        <h2>6. Requesting a Refund</h2>
         <p>To request a refund or raise a dispute, please:</p>
         <ul>
           <li>Email <a href={`mailto:${EMAIL}`} style={{color:'var(--primary)'}}>{EMAIL}</a> with your project details and reason for the request</li>
@@ -159,14 +176,14 @@ const policies = {
           <li>We will acknowledge your request within <strong>2 business days</strong> and aim to resolve it within <strong>10 business days</strong></li>
         </ul>
 
-        <h2>6. Chargebacks</h2>
+        <h2>7. Chargebacks</h2>
         <p>
           We encourage clients to contact us before initiating a chargeback. Unauthorized chargebacks may result
           in suspension of services and recovery of funds through appropriate legal channels. This does not affect
           your rights under the ACL.
         </p>
 
-        <h2>7. Disputes</h2>
+        <h2>8. Disputes</h2>
         <p>
           If a dispute cannot be resolved directly, parties agree to attempt mediation before pursuing legal action.
           Australian Consumer Law complaints can also be lodged with the{' '}
@@ -205,13 +222,26 @@ const policies = {
           <li>Pay invoices by the due date stated on each invoice</li>
         </ul>
 
-        <h2>3. Intellectual Property</h2>
+        <h2>3. Intellectual Property &amp; Copyright</h2>
+        <p>
+          Under the <strong>Copyright Act 1968 (Cth)</strong>, copyright in work created by {COMPANY} vests in
+          {COMPANY} by default. IP is assigned to you only upon <strong>receipt of full payment</strong>.
+        </p>
         <ul>
-          <li><strong>Your content</strong>: You retain ownership of all content, logos, and materials you provide to us</li>
-          <li><strong>Deliverables</strong>: On full payment, you own the final deliverables created specifically for you</li>
-          <li><strong>Our tools &amp; frameworks</strong>: We retain ownership of proprietary tools, code libraries, and methodologies we use; we grant you a licence to use them as part of your deliverables</li>
-          <li>We reserve the right to display completed work in our portfolio unless you request otherwise in writing</li>
+          <li><strong>Your content</strong>: You retain full ownership of all content, logos, images, and materials you provide. You warrant that this content does not infringe any third-party intellectual property rights.</li>
+          <li><strong>Custom deliverables</strong>: On receipt of full payment, we assign to you ownership of all custom code and designs created specifically for your project.</li>
+          <li><strong>Our tools &amp; frameworks</strong>: We retain ownership of pre-existing tools, code libraries, templates, and methodologies. We grant you a perpetual, royalty-free licence to use these as part of your delivered project.</li>
+          <li><strong>Third-party assets</strong>: Stock photos, fonts, plugins, and third-party software are subject to their own licence terms. You are responsible for maintaining any required licences.</li>
+          <li>We reserve the right to display completed work in our portfolio. If your project is confidential, notify us in writing before project commencement.</li>
         </ul>
+
+        <h2>3a. SEO &amp; Google Rankings Disclaimer</h2>
+        <p>
+          We cannot and do not guarantee specific search engine rankings, Google review counts, or advertising
+          outcomes. Google's algorithms and policies are outside our control. Any projections or estimates we
+          provide are based on industry data and best practices, not guaranteed results. {COMPANY} is not
+          liable for changes in rankings caused by Google algorithm updates or platform policy changes.
+        </p>
 
         <h2>4. Payment Terms</h2>
         <ul>
@@ -228,12 +258,18 @@ const policies = {
           Tax invoices will be provided on request.
         </p>
 
-        <h2>6. Limitation of Liability</h2>
+        <h2>6. Limitation of Liability &amp; UCT Compliance</h2>
         <p>
           To the maximum extent permitted by Australian law, {COMPANY}'s liability for any claim arising from
-          our services is limited to the amount paid for the specific service giving rise to the claim in the
-          3 months preceding the claim. We are not liable for indirect, consequential, or special damages.
-          Nothing in these Terms excludes consumer guarantees under the ACL.
+          our services is limited to the total fees paid for the specific service giving rise to the claim.
+          We are not liable for indirect, consequential, or special damages (e.g. loss of business opportunity,
+          lost profit, data loss) where we have not been negligent.
+        </p>
+        <p>
+          <strong>Nothing in these Terms excludes consumer guarantees under the ACL.</strong> These Terms comply
+          with the <em>Unfair Contract Terms (UCT) regime</em> as amended from 9 November 2023 under the
+          Treasury Laws Amendment (More Competition, Better Prices) Act 2022. We do not include terms that
+          create a significant imbalance in rights and are not reasonably necessary to protect our legitimate interests.
         </p>
 
         <h2>7. Warranty</h2>
@@ -297,19 +333,31 @@ const policies = {
           },
           {
             q: 'Do you offer hosting?',
-            a: 'We can recommend and set up reliable Australian-based hosting for your site, or deploy on your existing hosting. Ongoing hosting and maintenance packages are available.',
+            a: 'We can recommend and set up reliable Australian-based hosting for your site, or deploy on your existing hosting. Ongoing hosting and maintenance packages are available starting from $50/month.',
           },
           {
             q: 'What happens if I\'m not happy with the design?',
-            a: 'We include revision rounds in every project and work closely with you throughout the design process. Your satisfaction is guaranteed — we won\'t launch until you\'re happy. If there\'s an issue, our 30-day bug-fix warranty has you covered.',
+            a: 'We include 3 rounds of revisions in every project and work closely with you throughout the design phase. We won\'t launch until you\'re happy. Under the Australian Consumer Law, if our services have a major failure, you are entitled to a refund or free rectification — our 30-day bug-fix warranty covers any defects in our code after launch.',
+          },
+          {
+            q: 'Who owns my website once it\'s built?',
+            a: 'You own everything — 100%. Under our Terms of Service and the Copyright Act 1968 (Cth), full copyright in all custom code and designs transfers to you upon receipt of final payment. We retain ownership of general-purpose tools and frameworks we\'ve built, but grant you a perpetual licence to use them as part of your site.',
+          },
+          {
+            q: 'Can you guarantee Google rankings or review growth?',
+            a: 'No ethical agency can — and we won\'t mislead you. Under the Australian Consumer Law, making guarantees we can\'t keep would be misleading conduct. What we DO guarantee is best-practice implementation, transparent reporting, and measurable improvement in visibility. Most clients see significant ranking improvements within 60–90 days.',
           },
           {
             q: 'Do you sign NDAs or confidentiality agreements?',
-            a: 'Yes. We are happy to sign an NDA before discussing sensitive project details. Contact us to arrange this before your first call.',
+            a: 'Yes. We\'re happy to sign an NDA before discussing sensitive project details. Under Victorian contract law, electronic signatures are legally valid — we can execute NDAs via email or DocuSign. Contact us to arrange this before your first call.',
+          },
+          {
+            q: 'Will you spam me after I fill in the contact form?',
+            a: 'Never. Under the Spam Act 2003 (Cth), we require your separate, active consent before sending any marketing communications. A contact form submission only authorises us to reply to your specific enquiry. You will not be added to any mailing list without explicitly opting in.',
           },
           {
             q: 'How do I get started?',
-            a: 'Simply fill in the contact form on this page, email us at contact@wewebu.com.au, or call 0421 688 186. We\'ll schedule a free 30-minute discovery call to understand your goals and provide a no-obligation quote.',
+            a: 'Fill in the contact form, email contact@wewebu.com.au, or call 0421 688 186. We\'ll schedule a free 30-minute discovery call and provide a detailed, no-obligation quote within 48 hours.',
           },
         ].map(({ q, a }, i) => (
           <div key={i} style={{ marginBottom: '1.5rem', paddingBottom: '1.5rem', borderBottom: '1px solid var(--border)' }}>
