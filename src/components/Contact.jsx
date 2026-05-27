@@ -1,38 +1,9 @@
-import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Mail, MapPin, Phone, Send, CheckCircle } from 'lucide-react'
+import { Mail, MapPin, Phone, Send, CheckCircle, AlertCircle } from 'lucide-react'
+import { useForm, ValidationError } from '@formspree/react'
 
 export default function Contact() {
-  const [form, setForm]       = useState({ name: '', email: '', service: '', message: '' })
-  const [loading, setLoading] = useState(false)
-  const [done, setDone]       = useState(false)
-
-  const handle = e => setForm(f => ({ ...f, [e.target.name]: e.target.value }))
-
-  const submit = async e => {
-    e.preventDefault()
-    setLoading(true)
-    try {
-      const res = await fetch('https://formspree.io/f/xeedvrqz', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({
-          name: form.name,
-          email: form.email,
-          service: form.service,
-          message: form.message,
-        }),
-      })
-      if (res.ok) {
-        setDone(true)
-      } else {
-        alert('Something went wrong. Please email us directly at contact@wewebu.com.au')
-      }
-    } catch {
-      alert('Network error. Please call us on 0421 688 186')
-    }
-    setLoading(false)
-  }
+  const [state, handleSubmit] = useForm('xeedvrqz')
 
   return (
     <section className="contact" id="contact">
@@ -86,7 +57,7 @@ export default function Contact() {
             transition={{ duration: 0.7, delay: 0.1 }}
           >
             <div className="contact__form">
-              {done ? (
+              {state.succeeded ? (
                 <div className="form-success">
                   <motion.div
                     className="form-success-icon"
@@ -102,42 +73,61 @@ export default function Contact() {
                   </p>
                 </div>
               ) : (
-                <form onSubmit={submit}>
+                <form onSubmit={handleSubmit}>
+                  {state.errors && state.errors.length > 0 && (
+                    <div style={{
+                      display: 'flex', alignItems: 'center', gap: '0.5rem',
+                      padding: '0.75rem 1rem', marginBottom: '1rem',
+                      background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)',
+                      borderRadius: 'var(--radius)', color: '#ef4444', fontSize: '0.85rem',
+                    }}>
+                      <AlertCircle size={15} />
+                      Something went wrong. Please email us at contact@wewebu.com.au
+                    </div>
+                  )}
                   <div className="form-row">
                     <div className="form-group">
                       <label className="form-label">Your Name *</label>
-                      <input className="form-input" name="name" value={form.name}
-                        onChange={handle} required placeholder="e.g. John Smith" />
+                      <input className="form-input" name="name"
+                        required placeholder="e.g. John Smith" />
+                      <ValidationError field="name" errors={state.errors}
+                        style={{ color: '#ef4444', fontSize: '0.78rem', marginTop: '0.25rem' }} />
                     </div>
                     <div className="form-group">
                       <label className="form-label">Email Address *</label>
-                      <input className="form-input" name="email" type="email" value={form.email}
-                        onChange={handle} required placeholder="john@company.com.au" />
+                      <input className="form-input" name="email" type="email"
+                        required placeholder="john@company.com.au" />
+                      <ValidationError field="email" errors={state.errors}
+                        style={{ color: '#ef4444', fontSize: '0.78rem', marginTop: '0.25rem' }} />
                     </div>
                   </div>
                   <div className="form-group">
                     <label className="form-label">Service Interested In</label>
-                    <select className="form-select" name="service" value={form.service} onChange={handle}>
+                    <select className="form-select" name="service">
                       <option value="">Select a service…</option>
                       <option value="website">Website Design &amp; Development</option>
                       <option value="webapp">Web Application Development</option>
                       <option value="google">Google Business Promotion</option>
+                      <option value="logo">Logo &amp; Brand Identity</option>
+                      <option value="seo">Monthly SEO &amp; Maintenance</option>
                       <option value="other">Other / Not Sure Yet</option>
                     </select>
                   </div>
                   <div className="form-group">
                     <label className="form-label">Tell us about your project *</label>
-                    <textarea className="form-textarea" name="message" value={form.message}
-                      onChange={handle} required
+                    <textarea className="form-textarea" name="message"
+                      required
                       placeholder="What do you need? What's your timeline and budget range?" />
+                    <ValidationError field="message" errors={state.errors}
+                      style={{ color: '#ef4444', fontSize: '0.78rem', marginTop: '0.25rem' }} />
                   </div>
                   <p style={{ fontSize: '0.75rem', color: 'var(--muted)', marginBottom: '1rem', lineHeight: 1.5 }}>
                     By submitting this form you agree to our{' '}
                     <span style={{ color: 'var(--primary)' }}>Privacy Policy</span>.
                     Your information is collected under the Privacy Act 1988 (Cth) and used only to respond to your enquiry.
                   </p>
-                  <button className="form-submit" type="submit" disabled={loading}>
-                    {loading ? (
+                  <button className="form-submit" type="submit" disabled={state.submitting}>
+                    {state.submitting ? (
                       <>
                         <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style={{ animation: 'spin 0.8s linear infinite' }}>
                           <circle cx="9" cy="9" r="7" stroke="rgba(255,255,255,0.3)" strokeWidth="2.5"/>
