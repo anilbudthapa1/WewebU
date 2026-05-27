@@ -74,6 +74,8 @@ export default function Contact() {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit}>
+                  {/* Hidden Formspree fields */}
+                  <input type="hidden" name="_subject" value="New enquiry from WeWebU website" />
                   {state.errors && state.errors.length > 0 && (
                     <div style={{
                       display: 'flex', alignItems: 'center', gap: '0.5rem',
