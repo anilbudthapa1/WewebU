@@ -12,10 +12,26 @@ export default function Contact() {
   const submit = async e => {
     e.preventDefault()
     setLoading(true)
-    // TODO: Replace with fetch() POST to your preferred endpoint (Formspree / Netlify Forms / custom API)
-    await new Promise(r => setTimeout(r, 1600))
+    try {
+      const res = await fetch('https://formspree.io/f/xeedvrqz', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          service: form.service,
+          message: form.message,
+        }),
+      })
+      if (res.ok) {
+        setDone(true)
+      } else {
+        alert('Something went wrong. Please email us directly at contact@wewebu.com.au')
+      }
+    } catch {
+      alert('Network error. Please call us on 0421 688 186')
+    }
     setLoading(false)
-    setDone(true)
   }
 
   return (
