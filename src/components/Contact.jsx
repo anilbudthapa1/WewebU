@@ -1,25 +1,16 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Mail, MapPin, Phone, Send, CheckCircle, AlertCircle } from 'lucide-react'
+import emailjs from '@emailjs/browser'
 
-const WEB3FORMS_KEY = '0d6afe54-a8f7-46f4-ba94-7d2cdee7d708'
-
-const AUTO_REPLY = `Hi {name},
-
-Thank you for contacting WeWebU! We've received your enquiry and will get back to you within 24 hours with a free, no-obligation quote.
-
-In the meantime, feel free to call us on 0421 688 186.
-
-Kind regards,
-Anil Budthapa
-WeWebU — Website Design & Development
-📞 0421 688 186
-🌐 www.wewebu.com.au
-📍 5 Eve Ct, Springvale VIC 3171`
+const WEB3FORMS_KEY  = '0d6afe54-a8f7-46f4-ba94-7d2cdee7d708'
+const EJS_SERVICE    = 'service_2uddodr'
+const EJS_TEMPLATE   = 'template_9j1zjtu'
+const EJS_PUBLIC_KEY = 'aDjVTgIVu0OH41C9Z'
 
 export default function Contact() {
   const [form, setForm]     = useState({ name: '', email: '', service: '', message: '' })
-  const [status, setStatus] = useState('idle') // idle | loading | success | error
+  const [status, setStatus] = useState('idle')
 
   const handle = e => setForm(f => ({ ...f, [e.target.name]: e.target.value }))
 
@@ -41,13 +32,19 @@ export default function Contact() {
           email: form.email,
           service: form.service || 'Not specified',
           message: form.message,
-          autoresponse: AUTO_REPLY.replace('{name}', form.name),
           botcheck: '',
         }),
       })
       clearTimeout(timeout)
       const data = await res.json()
       if (data.success) {
+        // Send auto-reply via EmailJS
+        emailjs.send(
+          EJS_SERVICE,
+          EJS_TEMPLATE,
+          { to_name: form.name, to_email: form.email },
+          EJS_PUBLIC_KEY
+        ).catch(() => {}) // silent — notification already delivered
         setStatus('success')
       } else {
         setStatus('error')
