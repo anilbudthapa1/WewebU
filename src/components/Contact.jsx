@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Mail, MapPin, Phone, Send, CheckCircle, AlertCircle } from 'lucide-react'
 
-const WEB3FORMS_KEY = 'REPLACE_WITH_WEB3FORMS_KEY'
+const WEB3FORMS_KEY = '0d6afe54-a8f7-46f4-ba94-7d2cdee7d708'
 
 const AUTO_REPLY = `Hi {name},
 
