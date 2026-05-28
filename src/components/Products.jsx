@@ -61,10 +61,11 @@ const products = [
     highlight: false,
     desc: 'Scalable custom web apps — SaaS platforms, client portals, dashboards, booking systems, and business tools. Built with React, Node.js, and cloud infrastructure. Free discovery call included.',
     features: ['React / Node.js stack', 'User authentication', 'Database design', 'API integration', 'Cloud deployment'],
-    cta: 'Book Discovery Call',
+    cta: 'View Details & Book Discovery Call',
     color: '#f59e0b',
     bg: 'rgba(245,158,11,0.06)',
-    href: '#contact',
+    href: '/products/web-app',
+    isRoute: true,
   },
   {
     name: 'Google Business Optimisation',

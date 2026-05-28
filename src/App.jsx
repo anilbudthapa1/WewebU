@@ -22,6 +22,7 @@ import ScrollProgress from './components/ScrollProgress'
 import WhatsAppButton from './components/WhatsAppButton'
 import StarterWebsite from './pages/StarterWebsite'
 import EcommerceStore from './pages/EcommerceStore'
+import WebApp from './pages/WebApp'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -112,6 +113,7 @@ export default function App() {
           <Route path="/" element={<HomePage loaded={loaded} setLoaded={setLoaded} glowRef={glowRef} />} />
           <Route path="/products/starter-website" element={<StarterWebsite />} />
           <Route path="/products/ecommerce" element={<EcommerceStore />} />
+          <Route path="/products/web-app" element={<WebApp />} />
         </Routes>
       )}
     </ThemeContext.Provider>
