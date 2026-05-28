@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, createContext, useContext } from 'react'
+import { Routes, Route } from 'react-router-dom'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
@@ -19,12 +20,37 @@ import Contact from './components/Contact'
 import Footer from './components/Footer'
 import ScrollProgress from './components/ScrollProgress'
 import WhatsAppButton from './components/WhatsAppButton'
+import StarterWebsite from './pages/StarterWebsite'
 
 gsap.registerPlugin(ScrollTrigger)
 
 // ── Theme Context ─────────────────────────────────────
 export const ThemeContext = createContext({ theme: 'dark', toggle: () => {} })
 export const useTheme = () => useContext(ThemeContext)
+
+function HomePage({ loaded, setLoaded, glowRef }) {
+  return (
+    <>
+      <div className="mouse-glow" ref={glowRef} />
+      <Cursor />
+      <ScrollProgress />
+      <Navbar />
+      <main>
+        <Hero />
+        <Marquee />
+        <Services />
+        <WhyUs />
+        <Process />
+        <Work />
+        <Products />
+        <Testimonials />
+        <Contact />
+      </main>
+      <Footer />
+      <WhatsAppButton />
+    </>
+  )
+}
 
 export default function App() {
   const [loaded, setLoaded] = useState(false)
@@ -33,7 +59,6 @@ export default function App() {
   const glowRef    = useRef(null)
   const mousePos   = useRef({ x: 0, y: 0 })
 
-  // Apply theme to <html>
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
     localStorage.setItem('ww-theme', theme)
@@ -41,7 +66,6 @@ export default function App() {
 
   const toggleTheme = () => setTheme(t => t === 'dark' ? 'light' : 'dark')
 
-  // Lenis smooth scroll
   useEffect(() => {
     const lenis = new Lenis({
       duration: 1.2,
@@ -57,7 +81,6 @@ export default function App() {
     return () => { cancelAnimationFrame(rafId); lenis.destroy() }
   }, [])
 
-  // Mouse glow follower
   useEffect(() => {
     const glow = glowRef.current
     if (!glow) return
@@ -73,7 +96,6 @@ export default function App() {
     return () => { cancelAnimationFrame(raf); window.removeEventListener('mousemove', move) }
   }, [loaded])
 
-  // Lock scroll during preloader
   useEffect(() => {
     document.body.style.overflow = loaded ? '' : 'hidden'
   }, [loaded])
@@ -85,25 +107,10 @@ export default function App() {
       </AnimatePresence>
 
       {loaded && (
-        <>
-          <div className="mouse-glow" ref={glowRef} />
-          <Cursor />
-          <ScrollProgress />
-          <Navbar />
-          <main>
-            <Hero />
-            <Marquee />
-            <Services />
-            <WhyUs />
-            <Process />
-            <Work />
-            <Products />
-            <Testimonials />
-            <Contact />
-          </main>
-          <Footer />
-          <WhatsAppButton />
-        </>
+        <Routes>
+          <Route path="/" element={<HomePage loaded={loaded} setLoaded={setLoaded} glowRef={glowRef} />} />
+          <Route path="/products/starter-website" element={<StarterWebsite />} />
+        </Routes>
       )}
     </ThemeContext.Provider>
   )

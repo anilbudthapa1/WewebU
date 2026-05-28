@@ -1,5 +1,6 @@
 import { useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { ArrowRight, Star } from 'lucide-react'
@@ -24,16 +25,17 @@ const products = [
   {
     name: 'Starter Business Website',
     category: 'Website Design',
-    price: '$1,500',
-    priceNote: 'Starting from',
-    badge: null,
+    price: '$500',
+    priceNote: 'One-time · GST inclusive',
+    badge: '🔥 Best Value',
     highlight: false,
     desc: 'Professional 5-page business website — mobile-first, SEO-optimised, fast loading. Includes contact form, Google Maps, SSL security, and 30-day support. Perfect for small businesses and startups.',
     features: ['5-page responsive design', 'SEO optimised', 'Contact form', 'Google Maps', '30-day free support'],
-    cta: 'Get Quote',
+    cta: 'View Details & Get Started',
     color: 'var(--primary)',
     bg: 'rgba(99,102,241,0.06)',
-    href: '#contact',
+    href: '/products/starter-website',
+    isRoute: true,
   },
   {
     name: 'E-commerce Store',
@@ -108,7 +110,8 @@ const products = [
 ]
 
 export default function Products() {
-  const secRef = useRef(null)
+  const secRef   = useRef(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -253,7 +256,8 @@ export default function Products() {
                 href={p.href}
                 onClick={e => {
                   e.preventDefault()
-                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
+                  if (p.isRoute) { navigate(p.href) }
+                  else { document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }) }
                 }}
                 style={{
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
