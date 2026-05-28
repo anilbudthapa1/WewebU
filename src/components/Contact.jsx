@@ -4,8 +4,8 @@ import { Mail, MapPin, Phone, Send, CheckCircle, AlertCircle } from 'lucide-reac
 import emailjs from '@emailjs/browser'
 
 const EJS_SERVICE        = 'service_2uddodr'
-const EJS_AUTOREPLY      = 'template_9j1zjtu'   // → sends to customer
-const EJS_NOTIFY         = 'template_notify01'   // → sends to contact@wewebu.com.au  ← replace with your template ID
+const EJS_AUTOREPLY      = 'template_9j1zjtu'   // → auto-reply to customer
+const EJS_NOTIFY         = 'template_bwr8kyj'   // → notification to contact@wewebu.com.au
 const EJS_PUBLIC_KEY     = 'aDjVTgIVu0OH41C9Z'
 
 const SERVICE_OPTIONS = [
@@ -36,13 +36,15 @@ export default function Contact() {
     setStatus('loading')
 
     const vars = {
-      from_name: form.name,
-      from_email: form.email,
-      service:    form.service || 'Not specified',
-      message:    form.message,
-      to_name:    form.name,
-      to_email:   form.email,
-      reply_to:   form.email,
+      // notification template variables ({{name}}, {{email}}, {{service}}, {{message}})
+      name:     form.name,
+      email:    form.email,
+      service:  form.service || 'Not specified',
+      message:  form.message,
+      // auto-reply template variables ({{to_name}}, {{to_email}})
+      to_name:  form.name,
+      to_email: form.email,
+      reply_to: form.email,
     }
 
     try {
