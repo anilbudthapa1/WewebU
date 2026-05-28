@@ -26,8 +26,8 @@ export default function Cursor() {
 
     const loop = () => {
       outerPos.current = {
-        x: outerPos.current.x + (mousePos.current.x - outerPos.current.x) * 0.12,
-        y: outerPos.current.y + (mousePos.current.y - outerPos.current.y) * 0.12,
+        x: outerPos.current.x + (mousePos.current.x - outerPos.current.x) * 0.28,
+        y: outerPos.current.y + (mousePos.current.y - outerPos.current.y) * 0.28,
       }
       inner.style.transform = `translate(${mousePos.current.x}px, ${mousePos.current.y}px) translate(-50%,-50%)`
       outer.style.transform = `translate(${outerPos.current.x}px, ${outerPos.current.y}px) translate(-50%,-50%)`

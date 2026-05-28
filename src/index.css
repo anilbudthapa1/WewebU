@@ -225,6 +225,8 @@ ul, ol { list-style: none; }
 }
 
 /* ── Custom Cursor ───────────────────────────────────── */
+*, *::before, *::after { cursor: none !important; }
+
 .cursor-inner {
   position: fixed;
   top: 0; left: 0;
