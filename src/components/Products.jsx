@@ -46,10 +46,11 @@ const products = [
     highlight: false,
     desc: 'Custom online store on Shopify or WooCommerce. Includes product catalogue, secure payments, inventory management, and conversion-optimised design. Integrated with Afterpay and Australia Post.',
     features: ['Shopify / WooCommerce', 'Secure payment gateway', 'Inventory management', 'Afterpay integration', 'Australia Post shipping'],
-    cta: 'Get Quote',
+    cta: 'View Details & Get Started',
     color: 'var(--secondary)',
     bg: 'rgba(139,92,246,0.06)',
-    href: '#contact',
+    href: '/products/ecommerce',
+    isRoute: true,
   },
   {
     name: 'Web Application Development',
