@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight, BookOpen, FileText, Search } from 'lucide-react'
 
 function MoonlightPreview() {
   return (
@@ -48,6 +48,48 @@ function MoonlightPreview() {
   )
 }
 
+function DefenceXinsoPreview() {
+  return (
+    <div style={{
+      background: '#ffffff', height: '100%', borderRadius: '6px',
+      padding: '10px', fontFamily: 'system-ui, sans-serif', overflow: 'hidden',
+      border: '1px solid #e2e8f0',
+    }}>
+      {/* Nav */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', paddingBottom: '6px', borderBottom: '1px solid #f1f5f9' }}>
+        <div style={{ fontSize: '7px', fontWeight: 700, color: '#0f172a' }}>DefenceXinso</div>
+        <div style={{ display: 'flex', gap: '6px' }}>
+          {['Blogs', 'Readings', 'Research'].map(n => (
+            <div key={n} style={{ fontSize: '5px', color: '#64748b' }}>{n}</div>
+          ))}
+        </div>
+        <div style={{ fontSize: '5px', background: '#1e293b', color: '#fff', padding: '2px 6px', borderRadius: '3px' }}>Login</div>
+      </div>
+      {/* Tag */}
+      <div style={{ fontSize: '5px', color: '#64748b', marginBottom: '4px' }}>Public research portfolio</div>
+      {/* Heading */}
+      <div style={{ fontSize: '9px', fontWeight: 800, color: '#0f172a', lineHeight: 1.2, marginBottom: '5px' }}>
+        AI Cybersecurity<br />Compliance Research
+      </div>
+      {/* Body text */}
+      <div style={{ fontSize: '5px', color: '#475569', lineHeight: 1.5, marginBottom: '6px' }}>
+        Exploring how Australia should regulate high-risk and agentic AI systems across cybersecurity, privacy, governance, and long-term digital risk.
+      </div>
+      {/* CTAs */}
+      {[
+        { label: 'View Research', bg: '#4f46e5', color: '#fff' },
+        { label: 'Reading Log',   bg: '#0f172a', color: '#fff' },
+        { label: 'Read Blogs',    bg: '#0f172a', color: '#fff' },
+      ].map(b => (
+        <div key={b.label} style={{
+          fontSize: '5px', fontWeight: 600, padding: '3px 0', textAlign: 'center',
+          background: b.bg, color: b.color, borderRadius: '3px', marginBottom: '3px',
+        }}>{b.label}</div>
+      ))}
+    </div>
+  )
+}
+
 const projects = [
   {
     tag: 'Web App · Live',
@@ -75,12 +117,12 @@ const projects = [
     dots: ['#f43f5e', '#fbbf24', '#22c55e'],
   },
   {
-    tag: 'Corporate',
-    title: 'Legal Firm Rebrand',
-    desc: 'Full brand identity + website delivering 5× more qualified leads.',
-    href: '#contact',
-    bg: 'linear-gradient(135deg, #f59e0b 0%, #ef4444 100%)',
-    dots: ['#f43f5e', '#fbbf24', '#22c55e'],
+    tag: 'Research · Live',
+    title: 'DefenceXinso Research',
+    desc: 'AI cybersecurity compliance research portal — tracking how Australia should regulate high-risk AI across cybersecurity, privacy, and governance.',
+    href: 'https://research.defencexinso.com',
+    dots: ['#ef4444', '#fbbf24', '#22c55e'],
+    customResearch: true,
   },
 ]
 
@@ -120,13 +162,13 @@ export default function Work() {
                     <div key={j} className="work__browser-dot" style={{ background: c }} />
                   ))}
                   <div className="work__browser-url" style={{ fontSize: '9px', color: '#94a3b8', paddingLeft: '6px' }}>
-                    {p.custom ? 'moonlight.defencexinso.com' : ''}
+                    {p.custom ? 'moonlight.defencexinso.com' : p.customResearch ? 'research.defencexinso.com' : ''}
                   </div>
                 </div>
                 <div className="work__screen" style={{ flex: 1 }}>
-                  {p.custom ? (
-                    <MoonlightPreview />
-                  ) : (
+                  {p.custom ? <MoonlightPreview />
+                    : p.customResearch ? <DefenceXinsoPreview />
+                    : (
                     <div className="work__screen-content" style={{ background: p.bg, height: '100%', borderRadius: '6px' }}>
                       {p.title.slice(0, 1)}
                     </div>
@@ -139,13 +181,13 @@ export default function Work() {
                 <p className="work__card-desc">{p.desc}</p>
                 <a
                   href={p.href}
-                  target={p.custom ? '_blank' : undefined}
-                  rel={p.custom ? 'noopener noreferrer' : undefined}
-                  onClick={!p.custom ? e => { e.preventDefault(); document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }) } : undefined}
+                  target={p.custom || p.customResearch ? '_blank' : undefined}
+                  rel={p.custom || p.customResearch ? 'noopener noreferrer' : undefined}
+                  onClick={!p.custom && !p.customResearch ? e => { e.preventDefault(); document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }) } : undefined}
                   style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', marginTop: '0.75rem',
                     color: 'var(--primary)', fontSize: '0.82rem', fontWeight: 600, textDecoration: 'none' }}
                 >
-                  {p.custom ? 'View Live Project' : 'View Case Study'} <ArrowUpRight size={14} />
+                  {p.custom || p.customResearch ? 'View Live Project' : 'View Case Study'} <ArrowUpRight size={14} />
                 </a>
               </div>
             </motion.div>
