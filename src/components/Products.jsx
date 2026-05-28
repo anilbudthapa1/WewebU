@@ -91,10 +91,11 @@ const products = [
     highlight: false,
     desc: 'Professional logo and brand identity design. Includes custom logo, colour palette, typography, and brand guidelines. Delivered in all formats. Multiple concepts, unlimited revisions.',
     features: ['Custom logo design', 'Colour palette', 'Brand guidelines', 'All file formats', 'Unlimited revisions'],
-    cta: 'Get Quote',
+    cta: 'View Details & Get Quote',
     color: '#ec4899',
     bg: 'rgba(236,72,153,0.06)',
-    href: '#contact',
+    href: '/products/logo-branding',
+    isRoute: true,
   },
   {
     name: 'Monthly SEO & Maintenance',

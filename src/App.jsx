@@ -24,6 +24,7 @@ import StarterWebsite from './pages/StarterWebsite'
 import EcommerceStore from './pages/EcommerceStore'
 import WebApp from './pages/WebApp'
 import GoogleBusiness from './pages/GoogleBusiness'
+import LogoBranding from './pages/LogoBranding'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -116,6 +117,7 @@ export default function App() {
           <Route path="/products/ecommerce" element={<EcommerceStore />} />
           <Route path="/products/web-app" element={<WebApp />} />
           <Route path="/products/google-business" element={<GoogleBusiness />} />
+          <Route path="/products/logo-branding" element={<LogoBranding />} />
         </Routes>
       )}
     </ThemeContext.Provider>
