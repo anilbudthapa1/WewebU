@@ -1,50 +1,61 @@
 import { useEffect, useRef } from 'react'
 
 export default function Cursor() {
-  const dotRef  = useRef(null)
-  const ringRef = useRef(null)
-  const pos     = useRef({ x: 0, y: 0 })
-  const ring    = useRef({ x: 0, y: 0 })
+  const innerRef = useRef(null)
+  const outerRef = useRef(null)
+  const mousePos = useRef({ x: -100, y: -100 })
+  const outerPos = useRef({ x: -100, y: -100 })
 
   useEffect(() => {
-    const dot  = dotRef.current
-    const ring = ringRef.current
-    if (!dot || !ring) return
+    const inner = innerRef.current
+    const outer = outerRef.current
+    if (!inner || !outer) return
 
     let raf
 
-    const move = e => { pos.current = { x: e.clientX, y: e.clientY } }
+    const onMove = e => { mousePos.current = { x: e.clientX, y: e.clientY } }
+
+    const onClick = e => {
+      const ripple = document.createElement('div')
+      ripple.className = 'cursor-ripple'
+      ripple.style.left = e.clientX + 'px'
+      ripple.style.top  = e.clientY + 'px'
+      document.body.appendChild(ripple)
+      ripple.addEventListener('animationend', () => ripple.remove())
+    }
 
     const loop = () => {
-      ring.current = {
-        x: ring.current.x + (pos.current.x - ring.current.x) * 0.14,
-        y: ring.current.y + (pos.current.y - ring.current.y) * 0.14,
+      outerPos.current = {
+        x: outerPos.current.x + (mousePos.current.x - outerPos.current.x) * 0.12,
+        y: outerPos.current.y + (mousePos.current.y - outerPos.current.y) * 0.12,
       }
-      dot.style.transform  = `translate(${pos.current.x}px, ${pos.current.y}px) translate(-50%,-50%)`
-      ringRef.current.style.transform = `translate(${ring.current.x}px, ${ring.current.y}px) translate(-50%,-50%)`
+      inner.style.transform = `translate(${mousePos.current.x}px, ${mousePos.current.y}px) translate(-50%,-50%)`
+      outer.style.transform = `translate(${outerPos.current.x}px, ${outerPos.current.y}px) translate(-50%,-50%)`
       raf = requestAnimationFrame(loop)
     }
     raf = requestAnimationFrame(loop)
 
-    const over = () => { dot.classList.add('hovered'); ringRef.current.classList.add('hovered') }
-    const out  = () => { dot.classList.remove('hovered'); ringRef.current.classList.remove('hovered') }
+    const onOver = () => { inner.classList.add('hovered'); outer.classList.add('hovered') }
+    const onOut  = () => { inner.classList.remove('hovered'); outer.classList.remove('hovered') }
 
-    window.addEventListener('mousemove', move)
+    window.addEventListener('mousemove', onMove, { passive: true })
+    window.addEventListener('click', onClick)
     document.querySelectorAll('a, button, [data-hover]').forEach(el => {
-      el.addEventListener('mouseenter', over)
-      el.addEventListener('mouseleave', out)
+      el.addEventListener('mouseenter', onOver)
+      el.addEventListener('mouseleave', onOut)
     })
 
     return () => {
       cancelAnimationFrame(raf)
-      window.removeEventListener('mousemove', move)
+      window.removeEventListener('mousemove', onMove)
+      window.removeEventListener('click', onClick)
     }
   }, [])
 
   return (
     <>
-      <div className="cursor-dot"  ref={dotRef} />
-      <div className="cursor-ring" ref={ringRef} />
+      <div className="cursor-inner" ref={innerRef} />
+      <div className="cursor-outer" ref={outerRef} />
     </>
   )
 }
