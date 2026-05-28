@@ -23,6 +23,7 @@ import WhatsAppButton from './components/WhatsAppButton'
 import StarterWebsite from './pages/StarterWebsite'
 import EcommerceStore from './pages/EcommerceStore'
 import WebApp from './pages/WebApp'
+import GoogleBusiness from './pages/GoogleBusiness'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -114,6 +115,7 @@ export default function App() {
           <Route path="/products/starter-website" element={<StarterWebsite />} />
           <Route path="/products/ecommerce" element={<EcommerceStore />} />
           <Route path="/products/web-app" element={<WebApp />} />
+          <Route path="/products/google-business" element={<GoogleBusiness />} />
         </Routes>
       )}
     </ThemeContext.Provider>

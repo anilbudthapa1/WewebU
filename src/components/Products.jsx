@@ -76,10 +76,11 @@ const products = [
     highlight: false,
     desc: 'Complete Google Business Profile setup and optimisation. Rank higher on Google Maps and local search. Includes keyword strategy, photo plan, service listings, and review management guidance.',
     features: ['Full profile setup', 'Keyword optimisation', 'Service listings', 'Photo strategy', 'Review management'],
-    cta: 'Get Started',
+    cta: 'View Details & Get Started',
     color: '#22c55e',
     bg: 'rgba(34,197,94,0.06)',
-    href: '#contact',
+    href: '/products/google-business',
+    isRoute: true,
   },
   {
     name: 'Logo & Brand Identity',
