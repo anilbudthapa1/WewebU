@@ -48,12 +48,11 @@ export default function Contact() {
     }
 
     try {
-      // Fire both in parallel — auto-reply to customer + notification to WeWebU
-      await Promise.all([
+      const [autoReply] = await Promise.allSettled([
         emailjs.send(EJS_SERVICE, EJS_AUTOREPLY, vars, EJS_PUBLIC_KEY),
         emailjs.send(EJS_SERVICE, EJS_NOTIFY,    vars, EJS_PUBLIC_KEY),
       ])
-      setStatus('success')
+      setStatus(autoReply.status === 'fulfilled' ? 'success' : 'error')
     } catch {
       setStatus('error')
     }
