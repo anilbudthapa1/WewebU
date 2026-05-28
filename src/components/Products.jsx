@@ -106,10 +106,11 @@ const products = [
     highlight: false,
     desc: 'Ongoing monthly SEO, Google Business management, website maintenance, security updates, content changes, and monthly performance reports. Cancel anytime — no lock-in contracts.',
     features: ['Local SEO management', 'Google Business posts', 'Website maintenance', 'Security updates', 'Monthly reports'],
-    cta: 'Start Growing',
+    cta: 'View Details & Start Growing',
     color: 'var(--primary)',
     bg: 'rgba(99,102,241,0.06)',
-    href: '#contact',
+    href: '/products/seo-maintenance',
+    isRoute: true,
   },
 ]
 
