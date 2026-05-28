@@ -37,7 +37,6 @@ function HomePage({ loaded, setLoaded, glowRef }) {
   return (
     <>
       <div className="mouse-glow" ref={glowRef} />
-      <Cursor />
       <ScrollProgress />
       <Navbar />
       <main>
@@ -107,6 +106,7 @@ export default function App() {
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      <Cursor />
       <AnimatePresence mode="wait">
         {!loaded && <Preloader onComplete={() => setLoaded(true)} key="preloader" />}
       </AnimatePresence>

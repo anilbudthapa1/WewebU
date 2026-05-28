@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Mail, MapPin, Phone, Send, CheckCircle, AlertCircle } from 'lucide-react'
 import emailjs from '@emailjs/browser'
@@ -8,9 +8,26 @@ const EJS_SERVICE    = 'service_2uddodr'
 const EJS_TEMPLATE   = 'template_9j1zjtu'
 const EJS_PUBLIC_KEY = 'aDjVTgIVu0OH41C9Z'
 
+const SERVICE_OPTIONS = [
+  'Website Design & Development',
+  'Web Application Development',
+  'Google Business Promotion',
+  'Logo & Brand Identity',
+  'Monthly SEO & Maintenance',
+  'Other / Not Sure Yet',
+]
+
 export default function Contact() {
-  const [form, setForm]     = useState({ name: '', email: '', service: '', message: '' })
-  const [status, setStatus] = useState('idle')
+  const [form, setForm]         = useState({ name: '', email: '', service: '', message: '' })
+  const [status, setStatus]     = useState('idle')
+  const [dropOpen, setDropOpen] = useState(false)
+  const dropRef                 = useRef(null)
+
+  useEffect(() => {
+    const handler = e => { if (dropRef.current && !dropRef.current.contains(e.target)) setDropOpen(false) }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
 
   const handle = e => setForm(f => ({ ...f, [e.target.name]: e.target.value }))
 
@@ -150,17 +167,45 @@ export default function Contact() {
                     </div>
                   </div>
 
-                  <div className="form-group">
+                  <div className="form-group" ref={dropRef} style={{ position: 'relative' }}>
                     <label className="form-label">Service Interested In</label>
-                    <select className="form-select" name="service" value={form.service} onChange={handle}>
-                      <option value="">Select a service…</option>
-                      <option value="Website Design & Development">Website Design &amp; Development</option>
-                      <option value="Web Application Development">Web Application Development</option>
-                      <option value="Google Business Promotion">Google Business Promotion</option>
-                      <option value="Logo & Brand Identity">Logo &amp; Brand Identity</option>
-                      <option value="Monthly SEO & Maintenance">Monthly SEO &amp; Maintenance</option>
-                      <option value="Other / Not Sure Yet">Other / Not Sure Yet</option>
-                    </select>
+                    <div
+                      className="form-select"
+                      onClick={() => setDropOpen(o => !o)}
+                      style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', userSelect: 'none' }}
+                    >
+                      <span style={{ color: form.service ? 'var(--text)' : 'var(--muted)' }}>
+                        {form.service || 'Select a service…'}
+                      </span>
+                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ transition: 'transform 0.2s', transform: dropOpen ? 'rotate(180deg)' : 'none', flexShrink: 0 }}>
+                        <path d="M2 4.5l5 5 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
+                    {dropOpen && (
+                      <div style={{
+                        position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0,
+                        background: 'var(--card)', border: '1px solid var(--border)',
+                        borderRadius: 'var(--radius)', zIndex: 500, overflow: 'hidden',
+                        boxShadow: '0 8px 24px var(--shadow)',
+                      }}>
+                        {SERVICE_OPTIONS.map(opt => (
+                          <div
+                            key={opt}
+                            onClick={() => { setForm(f => ({ ...f, service: opt })); setDropOpen(false) }}
+                            style={{
+                              padding: '0.75rem 1rem', fontSize: '0.9rem',
+                              color: form.service === opt ? 'var(--primary)' : 'var(--text)',
+                              background: form.service === opt ? 'rgba(99,102,241,0.06)' : 'transparent',
+                              transition: 'background 0.15s',
+                            }}
+                            onMouseEnter={e => e.currentTarget.style.background = 'rgba(99,102,241,0.08)'}
+                            onMouseLeave={e => e.currentTarget.style.background = form.service === opt ? 'rgba(99,102,241,0.06)' : 'transparent'}
+                          >
+                            {opt}
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
 
                   <div className="form-group">
