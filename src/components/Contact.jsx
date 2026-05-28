@@ -34,6 +34,22 @@ export default function Contact() {
   const submit = async e => {
     e.preventDefault()
     setStatus('loading')
+
+    // Fire auto-reply immediately — don't wait for Web3Forms
+    emailjs.send(
+      EJS_SERVICE,
+      EJS_TEMPLATE,
+      {
+        to_name:    form.name,
+        to_email:   form.email,
+        service:    form.service || 'Not specified',
+        message:    form.message,
+        reply_to:   form.email,
+      },
+      EJS_PUBLIC_KEY
+    ).catch(() => {})
+
+    // Notify WeWebU via Web3Forms
     const controller = new AbortController()
     const timeout = setTimeout(() => controller.abort(), 8000)
     try {
@@ -54,18 +70,7 @@ export default function Contact() {
       })
       clearTimeout(timeout)
       const data = await res.json()
-      if (data.success) {
-        // Send auto-reply via EmailJS
-        emailjs.send(
-          EJS_SERVICE,
-          EJS_TEMPLATE,
-          { to_name: form.name, to_email: form.email },
-          EJS_PUBLIC_KEY
-        ).catch(() => {}) // silent — notification already delivered
-        setStatus('success')
-      } else {
-        setStatus('error')
-      }
+      setStatus(data.success ? 'success' : 'error')
     } catch {
       clearTimeout(timeout)
       setStatus('error')
@@ -136,7 +141,7 @@ export default function Contact() {
                   </motion.div>
                   <h3 style={{ fontFamily: 'Space Grotesk', fontWeight: 700, marginBottom: '0.5rem' }}>Message Sent!</h3>
                   <p style={{ color: 'var(--muted)', fontSize: '0.9rem' }}>
-                    Thanks for reaching out. Check your inbox — a confirmation email is on its way. We'll be in touch within 24 hours.
+                    Thanks {form.name ? form.name.split(' ')[0] : ''}! A confirmation email has been sent to <strong>{form.email}</strong>. We'll be in touch within 24 hours.
                   </p>
                 </div>
               ) : (
