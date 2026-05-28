@@ -11,6 +11,9 @@ export default function Cursor() {
     const outer = outerRef.current
     if (!inner || !outer) return
 
+    document.documentElement.style.setProperty('cursor', 'none', 'important')
+    document.body.style.setProperty('cursor', 'none', 'important')
+
     let raf
 
     const onMove = e => { mousePos.current = { x: e.clientX, y: e.clientY } }

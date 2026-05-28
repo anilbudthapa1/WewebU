@@ -177,7 +177,7 @@ html.lenis, html.lenis body { height: auto; }
 
 a { color: inherit; text-decoration: none; }
 img, video { display: block; max-width: 100%; }
-button { cursor: pointer; border: none; background: none; font-family: inherit; }
+button { cursor: none; border: none; background: none; font-family: inherit; }
 ul, ol { list-style: none; }
 
 /* ── Utility ─────────────────────────────────────────── */
@@ -225,7 +225,7 @@ ul, ol { list-style: none; }
 }
 
 /* ── Custom Cursor ───────────────────────────────────── */
-*, *::before, *::after { cursor: none !important; }
+html, body, *, *::before, *::after { cursor: none !important; }
 
 .cursor-inner {
   position: fixed;
