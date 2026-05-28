@@ -3,10 +3,10 @@ import { motion } from 'framer-motion'
 import { Mail, MapPin, Phone, Send, CheckCircle, AlertCircle } from 'lucide-react'
 import emailjs from '@emailjs/browser'
 
-const WEB3FORMS_KEY  = '0d6afe54-a8f7-46f4-ba94-7d2cdee7d708'
-const EJS_SERVICE    = 'service_2uddodr'
-const EJS_TEMPLATE   = 'template_9j1zjtu'
-const EJS_PUBLIC_KEY = 'aDjVTgIVu0OH41C9Z'
+const EJS_SERVICE        = 'service_2uddodr'
+const EJS_AUTOREPLY      = 'template_9j1zjtu'   // → sends to customer
+const EJS_NOTIFY         = 'template_notify01'   // → sends to contact@wewebu.com.au  ← replace with your template ID
+const EJS_PUBLIC_KEY     = 'aDjVTgIVu0OH41C9Z'
 
 const SERVICE_OPTIONS = [
   'Website Design & Development',
@@ -35,44 +35,24 @@ export default function Contact() {
     e.preventDefault()
     setStatus('loading')
 
-    // Fire auto-reply immediately — don't wait for Web3Forms
-    emailjs.send(
-      EJS_SERVICE,
-      EJS_TEMPLATE,
-      {
-        to_name:    form.name,
-        to_email:   form.email,
-        service:    form.service || 'Not specified',
-        message:    form.message,
-        reply_to:   form.email,
-      },
-      EJS_PUBLIC_KEY
-    ).catch(() => {})
+    const vars = {
+      from_name: form.name,
+      from_email: form.email,
+      service:    form.service || 'Not specified',
+      message:    form.message,
+      to_name:    form.name,
+      to_email:   form.email,
+      reply_to:   form.email,
+    }
 
-    // Notify WeWebU via Web3Forms
-    const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 8000)
     try {
-      const res = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        signal: controller.signal,
-        body: JSON.stringify({
-          access_key: WEB3FORMS_KEY,
-          from_name: 'WeWebU Website',
-          subject: `New enquiry from ${form.name} — WeWebU`,
-          name: form.name,
-          email: form.email,
-          service: form.service || 'Not specified',
-          message: form.message,
-          botcheck: '',
-        }),
-      })
-      clearTimeout(timeout)
-      const data = await res.json()
-      setStatus(data.success ? 'success' : 'error')
+      // Fire both in parallel — auto-reply to customer + notification to WeWebU
+      await Promise.all([
+        emailjs.send(EJS_SERVICE, EJS_AUTOREPLY, vars, EJS_PUBLIC_KEY),
+        emailjs.send(EJS_SERVICE, EJS_NOTIFY,    vars, EJS_PUBLIC_KEY),
+      ])
+      setStatus('success')
     } catch {
-      clearTimeout(timeout)
       setStatus('error')
     }
   }
