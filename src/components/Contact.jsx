@@ -36,15 +36,16 @@ export default function Contact() {
     setStatus('loading')
 
     const vars = {
-      // notification template variables ({{name}}, {{email}}, {{service}}, {{message}})
-      name:     form.name,
-      email:    form.email,
-      service:  form.service || 'Not specified',
-      message:  form.message,
-      // auto-reply template variables ({{to_name}}, {{to_email}})
-      to_name:  form.name,
-      to_email: form.email,
-      reply_to: form.email,
+      name:       form.name,
+      from_name:  form.name,
+      email:      form.email,
+      from_email: form.email,
+      service:    form.service || 'Not specified',
+      message:    form.message,
+      time:       new Date().toLocaleString('en-AU', { timeZone: 'Australia/Melbourne' }),
+      to_name:    form.name,
+      to_email:   form.email,
+      reply_to:   form.email,
     }
 
     try {
