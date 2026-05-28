@@ -3,8 +3,8 @@ import { motion } from 'framer-motion'
 import { Mail, MapPin, Phone, Send, CheckCircle, AlertCircle } from 'lucide-react'
 import emailjs from '@emailjs/browser'
 
-const EJS_SERVICE        = 'service_2uddodr'
-const EJS_AUTOREPLY      = 'template_9j1zjtu'   // → auto-reply to customer
+const EJS_SERVICE        = 'service_t544jfs'
+const EJS_AUTOREPLY      = 'template_nrj7a81'   // → auto-reply to customer
 const EJS_NOTIFY         = 'template_bwr8kyj'   // → notification to contact@wewebu.com.au
 const EJS_PUBLIC_KEY     = 'aDjVTgIVu0OH41C9Z'
 
