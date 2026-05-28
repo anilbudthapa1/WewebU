@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WeWebU — Lead Finder</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #0f0f13;
+      color: #e2e8f0;
+      min-height: 100vh;
+      padding: 1.5rem 1rem 4rem;
+    }
+
+    .wrap { max-width: 700px; margin: 0 auto; }
+
+    /* Header */
+    .header { text-align: center; margin-bottom: 2rem; }
+    .header h1 { font-size: 1.6rem; font-weight: 800; color: #fff; letter-spacing: -0.02em; }
+    .header h1 span { color: #6366f1; }
+    .header p { color: #64748b; font-size: 0.85rem; margin-top: 0.35rem; }
+
+    /* Cards */
+    .card {
+      background: #1a1a24;
+      border: 1px solid #2a2a3a;
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .card h2 { font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: #6366f1; margin-bottom: 1rem; }
+
+    /* Inputs */
+    .field { margin-bottom: 0.85rem; }
+    .field label { display: block; font-size: 0.78rem; color: #94a3b8; margin-bottom: 0.35rem; }
+    .field input, .field select {
+      width: 100%; padding: 0.65rem 0.9rem;
+      background: #0f0f13; border: 1px solid #2a2a3a;
+      border-radius: 8px; color: #e2e8f0; font-size: 0.9rem;
+      outline: none; transition: border-color 0.2s;
+    }
+    .field input:focus, .field select:focus { border-color: #6366f1; }
+    .field input::placeholder { color: #475569; }
+
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+
+    /* Buttons */
+    .btn {
+      width: 100%; padding: 0.75rem;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: #fff; font-weight: 700; font-size: 0.9rem;
+      border: none; border-radius: 8px; cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .btn:hover { opacity: 0.88; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-outline {
+      background: transparent; border: 1px solid #6366f1;
+      color: #6366f1; margin-top: 0.75rem;
+    }
+    .btn-outline:hover { background: rgba(99,102,241,0.08); opacity: 1; }
+
+    /* Status bar */
+    #status {
+      font-size: 0.82rem; color: #94a3b8; padding: 0.6rem 0.9rem;
+      background: #0f0f13; border: 1px solid #2a2a3a;
+      border-radius: 8px; margin-bottom: 1rem;
+      display: none;
+    }
+    #status.show { display: block; }
+
+    /* Progress */
+    .progress-bar-wrap {
+      height: 4px; background: #2a2a3a; border-radius: 99px;
+      margin-top: 0.75rem; overflow: hidden; display: none;
+    }
+    .progress-bar-wrap.show { display: block; }
+    .progress-bar {
+      height: 100%; background: linear-gradient(90deg, #6366f1, #8b5cf6);
+      border-radius: 99px; transition: width 0.3s;
+    }
+
+    /* Results */
+    #results { display: none; }
+    #results.show { display: block; }
+
+    .result-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 0.75rem;
+    }
+    .result-header h2 { font-size: 0.95rem; font-weight: 700; color: #fff; }
+    .badge {
+      font-size: 0.72rem; font-weight: 700; padding: 0.2rem 0.6rem;
+      background: rgba(99,102,241,0.15); color: #6366f1;
+      border: 1px solid rgba(99,102,241,0.3); border-radius: 99px;
+    }
+
+    .lead-card {
+      background: #0f0f13; border: 1px solid #2a2a3a;
+      border-radius: 10px; padding: 1rem 1.1rem;
+      margin-bottom: 0.65rem;
+    }
+    .lead-card:hover { border-color: #6366f140; }
+    .lead-name { font-weight: 700; font-size: 0.95rem; color: #fff; margin-bottom: 0.5rem; }
+    .lead-meta { display: flex; flex-direction: column; gap: 0.25rem; }
+    .lead-meta span { font-size: 0.8rem; color: #64748b; }
+    .lead-meta a { color: #6366f1; text-decoration: none; }
+
+    .empty {
+      text-align: center; padding: 2rem 1rem;
+      color: #475569; font-size: 0.88rem;
+    }
+
+    /* Lock screen */
+    #lockScreen {
+      position: fixed; inset: 0;
+      background: #0f0f13;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 999;
+      padding: 2rem;
+    }
+    .lock-box { width: 100%; max-width: 360px; text-align: center; }
+    .lock-box h1 { font-size: 1.4rem; font-weight: 800; color: #fff; margin-bottom: 0.35rem; }
+    .lock-box h1 span { color: #6366f1; }
+    .lock-box p { color: #64748b; font-size: 0.82rem; margin-bottom: 1.5rem; }
+    .lock-box input {
+      width: 100%; padding: 0.75rem 1rem; margin-bottom: 0.75rem;
+      background: #1a1a24; border: 1px solid #2a2a3a;
+      border-radius: 8px; color: #fff; font-size: 0.95rem;
+      text-align: center; outline: none;
+    }
+    .lock-box input:focus { border-color: #6366f1; }
+    .lock-error { color: #ef4444; font-size: 0.78rem; margin-top: 0.4rem; display: none; }
+
+    /* Hidden map div for Places API */
+    #map { display: none; width: 1px; height: 1px; }
+  </style>
+</head>
+<body>
+
+<!-- Lock screen -->
+<div id="lockScreen">
+  <div class="lock-box">
+    <h1>WeWebU <span>Leads</span></h1>
+    <p>Internal tool — enter PIN to continue</p>
+    <input type="password" id="pinInput" placeholder="Enter PIN" onkeydown="if(event.key==='Enter')checkPin()" />
+    <button class="btn" onclick="checkPin()">Unlock</button>
+    <p class="lock-error" id="pinError">Incorrect PIN</p>
+  </div>
+</div>
+
+<div id="map"></div>
+
+<div class="wrap">
+  <div class="header">
+    <h1>WeWebU <span>Lead Finder</span></h1>
+    <p>Find local businesses on Google Maps that have no website</p>
+  </div>
+
+  <!-- API Key -->
+  <div class="card" id="keyCard">
+    <h2>Google Places API Key</h2>
+    <div class="field">
+      <label>API Key</label>
+      <input type="password" id="apiKeyInput" placeholder="AIza..." />
+    </div>
+    <button class="btn" onclick="saveKey()">Save Key</button>
+    <p style="font-size:0.72rem;color:#475569;margin-top:0.75rem;">
+      Get a free key at console.cloud.google.com → Enable "Places API"
+    </p>
+  </div>
+
+  <!-- Search -->
+  <div class="card">
+    <h2>Search</h2>
+    <div class="row">
+      <div class="field">
+        <label>Business Type</label>
+        <input type="text" id="bizType" placeholder="e.g. restaurants" value="restaurants" />
+      </div>
+      <div class="field">
+        <label>Location</label>
+        <input type="text" id="location" placeholder="e.g. Springvale VIC" value="Springvale VIC" />
+      </div>
+    </div>
+    <button class="btn" id="searchBtn" onclick="startSearch()">🔍 Find Leads</button>
+  </div>
+
+  <!-- Status -->
+  <div id="status"></div>
+  <div class="progress-bar-wrap" id="progressWrap">
+    <div class="progress-bar" id="progressBar" style="width:0%"></div>
+  </div>
+
+  <!-- Results -->
+  <div id="results">
+    <div class="card">
+      <div class="result-header">
+        <h2 id="resultsTitle">Leads</h2>
+        <span class="badge" id="leadCount">0 leads</span>
+      </div>
+      <div id="leadsList"></div>
+      <button class="btn btn-outline" id="csvBtn" onclick="downloadCSV()" style="display:none">
+        ⬇ Download CSV
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const PIN = 'wewebu2025'
+
+  // ── Lock screen ──────────────────────────────────────────
+  function checkPin() {
+    const val = document.getElementById('pinInput').value
+    if (val === PIN) {
+      document.getElementById('lockScreen').style.display = 'none'
+      init()
+    } else {
+      document.getElementById('pinError').style.display = 'block'
+    }
+  }
+
+  // ── Init ────────────────────────────────────────────────
+  function init() {
+    const saved = localStorage.getItem('ww_api_key')
+    if (saved) {
+      document.getElementById('apiKeyInput').value = saved
+      document.getElementById('keyCard').style.opacity = '0.5'
+    }
+  }
+
+  function saveKey() {
+    const key = document.getElementById('apiKeyInput').value.trim()
+    if (!key) return alert('Please enter your API key')
+    localStorage.setItem('ww_api_key', key)
+    document.getElementById('keyCard').style.opacity = '0.5'
+    setStatus('✅ API key saved')
+  }
+
+  // ── Status helpers ──────────────────────────────────────
+  function setStatus(msg, progress = null) {
+    const el = document.getElementById('status')
+    el.textContent = msg
+    el.className = 'show'
+    if (progress !== null) {
+      document.getElementById('progressWrap').className = 'progress-bar-wrap show'
+      document.getElementById('progressBar').style.width = progress + '%'
+    }
+  }
+
+  function hideStatus() {
+    document.getElementById('status').className = ''
+    document.getElementById('progressWrap').className = 'progress-bar-wrap'
+  }
+
+  // ── Places API via script tag ────────────────────────────
+  let mapsLoaded = false
+  let placesService = null
+
+  function loadMaps(apiKey) {
+    return new Promise((resolve, reject) => {
+      if (mapsLoaded) { resolve(); return }
+      const s = document.createElement('script')
+      s.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`
+      s.onload = () => {
+        mapsLoaded = true
+        const map = new google.maps.Map(document.getElementById('map'), {
+          center: { lat: -37.8, lng: 145 }, zoom: 10
+        })
+        placesService = new google.maps.places.PlacesService(map)
+        resolve()
+      }
+      s.onerror = () => reject(new Error('Failed to load Google Maps. Check your API key.'))
+      document.head.appendChild(s)
+    })
+  }
+
+  function textSearch(query, pageToken) {
+    return new Promise((resolve, reject) => {
+      const req = { query }
+      if (pageToken) req.pageToken = pageToken
+      placesService.textSearch(req, (results, status, pagination) => {
+        if (status === 'OK') resolve({ results, pagination })
+        else if (status === 'ZERO_RESULTS') resolve({ results: [], pagination: null })
+        else reject(new Error(`Places API: ${status}`))
+      })
+    })
+  }
+
+  function getDetails(placeId) {
+    return new Promise((resolve) => {
+      placesService.getDetails({
+        placeId,
+        fields: ['name', 'website', 'formatted_phone_number', 'formatted_address',
+                 'rating', 'user_ratings_total', 'business_status']
+      }, (result, status) => {
+        resolve(status === 'OK' ? result : null)
+      })
+    })
+  }
+
+  const sleep = ms => new Promise(r => setTimeout(r, ms))
+
+  // ── Main search ─────────────────────────────────────────
+  let allLeads = []
+
+  async function startSearch() {
+    const apiKey = localStorage.getItem('ww_api_key') || document.getElementById('apiKeyInput').value.trim()
+    const bizType = document.getElementById('bizType').value.trim()
+    const location = document.getElementById('location').value.trim()
+
+    if (!apiKey) { alert('Please save your API key first'); return }
+    if (!bizType || !location) { alert('Please enter business type and location'); return }
+
+    const btn = document.getElementById('searchBtn')
+    btn.disabled = true
+    btn.textContent = '⏳ Searching...'
+    allLeads = []
+    document.getElementById('results').className = ''
+    document.getElementById('leadsList').innerHTML = ''
+
+    try {
+      setStatus('Loading Google Maps...', 5)
+      await loadMaps(apiKey)
+
+      const query = `${bizType} in ${location}`
+      setStatus(`Searching: ${query}`, 10)
+
+      let pagination = null
+      let page = 0
+      let total = 0
+      const MAX_PAGES = 3
+
+      do {
+        if (page > 0) {
+          setStatus(`Loading page ${page + 1}...`, 10 + page * 20)
+          await sleep(2200)
+          pagination.nextPage()
+          await sleep(500)
+        }
+
+        const res = await textSearch(query, null)
+        const places = res.results || []
+        pagination = res.pagination
+
+        total += places.length
+        setStatus(`Page ${page + 1}: checking ${places.length} businesses...`, 20 + page * 20)
+
+        for (let i = 0; i < places.length; i++) {
+          const pct = 20 + page * 20 + Math.round((i / places.length) * 20)
+          setStatus(`Checking ${i + 1} / ${places.length} — ${places[i].name}`, pct)
+
+          const details = await getDetails(places[i].place_id)
+          if (!details) continue
+          if (details.business_status === 'PERMANENTLY_CLOSED') continue
+
+          if (!details.website) {
+            const lead = {
+              name:    details.name || places[i].name,
+              phone:   details.formatted_phone_number || '',
+              address: details.formatted_address || '',
+              rating:  details.rating
+                ? `${details.rating} ⭐ (${details.user_ratings_total ?? 0} reviews)`
+                : 'No rating',
+            }
+            allLeads.push(lead)
+            renderLead(lead)
+          }
+
+          await sleep(80)
+        }
+
+        page++
+        if (!pagination?.hasNextPage) break
+      } while (page < MAX_PAGES)
+
+      setStatus(`Done! Scanned ${total} businesses.`, 100)
+      showResults(bizType, location)
+
+    } catch (err) {
+      setStatus(`❌ Error: ${err.message}`)
+    } finally {
+      btn.disabled = false
+      btn.textContent = '🔍 Find Leads'
+    }
+  }
+
+  function renderLead(lead) {
+    const list = document.getElementById('leadsList')
+    document.getElementById('results').className = 'show'
+
+    const phoneLink = lead.phone
+      ? `<a href="tel:${lead.phone}">${lead.phone}</a>`
+      : '<span style="color:#ef444460">No phone listed</span>'
+
+    const waLink = lead.phone
+      ? ` · <a href="https://wa.me/${lead.phone.replace(/\D/g,'')}?text=${encodeURIComponent(`Hi ${lead.name}, I noticed your business doesn't have a website. I help local businesses get online from $500. Interested in a free quote?`)}">WhatsApp</a>`
+      : ''
+
+    const div = document.createElement('div')
+    div.className = 'lead-card'
+    div.innerHTML = `
+      <div class="lead-name">${lead.name}</div>
+      <div class="lead-meta">
+        <span>📞 ${phoneLink}${waLink}</span>
+        <span>📍 ${lead.address || '—'}</span>
+        <span>⭐ ${lead.rating}</span>
+      </div>`
+    list.appendChild(div)
+
+    document.getElementById('leadCount').textContent = `${allLeads.length} lead${allLeads.length !== 1 ? 's' : ''}`
+    document.getElementById('resultsTitle').textContent = `Leads Found`
+    document.getElementById('csvBtn').style.display = allLeads.length ? 'block' : 'none'
+  }
+
+  function showResults(bizType, location) {
+    if (allLeads.length === 0) {
+      document.getElementById('results').className = 'show'
+      document.getElementById('leadsList').innerHTML =
+        `<div class="empty">No leads found for <strong>${bizType} in ${location}</strong>.<br>Try a broader search term.</div>`
+    }
+  }
+
+  // ── CSV download ────────────────────────────────────────
+  function downloadCSV() {
+    const rows = [
+      ['Name', 'Phone', 'Address', 'Rating'],
+      ...allLeads.map(l => [l.name, l.phone, l.address, l.rating])
+    ]
+    const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n')
+    const blob = new Blob([csv], { type: 'text/csv' })
+    const a = document.createElement('a')
+    a.href = URL.createObjectURL(blob)
+    a.download = `leads-${Date.now()}.csv`
+    a.click()
+  }
+</script>
+</body>
+</html>
