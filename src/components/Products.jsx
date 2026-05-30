@@ -144,7 +144,7 @@ export default function Products() {
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.7 }}
         >
-          <span className="section-tag">✦ Pricing & Products</span>
+          <span className="section-tag">Pricing</span>
           <h2 className="section-heading">
             Transparent pricing, <span className="gradient-text">real results</span>
           </h2>

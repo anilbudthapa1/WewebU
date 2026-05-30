@@ -46,7 +46,7 @@ export default function Navbar() {
       >
         <div className="container">
           <div className="navbar__inner">
-            <a className="navbar__logo" href="/">WeWebU</a>
+            <a className="navbar__logo" href="/">We<span>Web</span>U</a>
 
             <div className="navbar__links">
               {links.map(l => (

@@ -29,9 +29,9 @@ export default function Hero() {
         { opacity: 0, y: 20 },
         { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', delay: 0.75 }
       )
-      gsap.fromTo('.hero__stat',
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', stagger: 0.1, delay: 0.95 }
+      gsap.fromTo('.hero__trust',
+        { opacity: 0, y: 16 },
+        { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', delay: 0.95 }
       )
       gsap.fromTo('.hero__badge',
         { opacity: 0, scale: 0.88 },
@@ -105,16 +105,12 @@ export default function Hero() {
             </a>
           </div>
 
-          <div className="hero__stats">
-            {[
-              { num: '50+', label: 'Projects Delivered' },
-              { num: '98%', label: 'Client Satisfaction' },
-              { num: '5★',  label: 'Google Rating' },
-            ].map(s => (
-              <div key={s.label} className="hero__stat" style={{ opacity: 0 }}>
-                <div className="hero__stat-num">{s.num}</div>
-                <div className="hero__stat-label">{s.label}</div>
-              </div>
+          <div className="hero__trust" style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginTop: '3rem', opacity: 0 }}>
+            {['No lock-in contracts', 'Australian owned', '24h response', 'Free quote'].map(t => (
+              <span key={t} style={{ fontSize: '0.8rem', color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <span style={{ width: 5, height: 5, borderRadius: '50%', background: 'var(--primary)', display: 'inline-block', flexShrink: 0 }} />
+                {t}
+              </span>
             ))}
           </div>
         </div>

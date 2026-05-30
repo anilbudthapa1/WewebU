@@ -61,7 +61,6 @@ export default function WhyUs() {
               transition={{ duration: 0.7 }}
               style={{ marginBottom: '2.5rem' }}
             >
-              <span className="section-tag">✦ Why Choose Us</span>
               <h2 className="section-heading">
                 Built different, <span className="gradient-text">designed to win</span>
               </h2>

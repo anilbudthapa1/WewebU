@@ -136,7 +136,6 @@ export default function Work() {
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.7 }}
         >
-          <span className="section-tag">✦ Our Work</span>
           <h2 className="section-heading">
             Projects that <span className="gradient-text">speak for themselves</span>
           </h2>

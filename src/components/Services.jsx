@@ -56,7 +56,7 @@ export default function Services() {
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.7 }}
         >
-          <span className="section-tag">✦ Our Services</span>
+          <span className="section-tag">Services</span>
           <h2 className="section-heading">
             Everything you need to <span className="gradient-text">grow online</span>
           </h2>

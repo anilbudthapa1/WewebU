@@ -38,7 +38,6 @@ export default function Testimonials() {
           transition={{ duration: 0.7 }}
           style={{ textAlign: 'center', marginBottom: '1rem' }}
         >
-          <span className="section-tag">✦ Client Reviews</span>
           <h2 className="section-heading">
             Businesses that <span className="gradient-text">trust us</span>
           </h2>

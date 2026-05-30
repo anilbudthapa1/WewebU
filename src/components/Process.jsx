@@ -21,7 +21,6 @@ export default function Process() {
           transition={{ duration: 0.7 }}
           style={{ textAlign: 'center', marginBottom: '1rem' }}
         >
-          <span className="section-tag">✦ How We Work</span>
           <h2 className="section-heading">
             Our <span className="gradient-text">proven process</span>
           </h2>

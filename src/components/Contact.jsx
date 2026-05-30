@@ -70,7 +70,7 @@ export default function Contact() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.7 }}
           >
-            <span className="section-tag">✦ Contact Us</span>
+            <span className="section-tag">Get in touch</span>
             <h2 className="contact__info-title">
               Ready to <span className="gradient-text">build something great?</span>
             </h2>
