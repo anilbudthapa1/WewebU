@@ -28,9 +28,10 @@ export default function Cursor() {
     }
 
     const loop = () => {
+      // Lerp 0.55 — outer ring follows closely without feeling glued
       outerPos.current = {
-        x: outerPos.current.x + (mousePos.current.x - outerPos.current.x) * 0.28,
-        y: outerPos.current.y + (mousePos.current.y - outerPos.current.y) * 0.28,
+        x: outerPos.current.x + (mousePos.current.x - outerPos.current.x) * 0.55,
+        y: outerPos.current.y + (mousePos.current.y - outerPos.current.y) * 0.55,
       }
       inner.style.transform = `translate(${mousePos.current.x}px, ${mousePos.current.y}px) translate(-50%,-50%)`
       outer.style.transform = `translate(${outerPos.current.x}px, ${outerPos.current.y}px) translate(-50%,-50%)`
