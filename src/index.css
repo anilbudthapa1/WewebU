@@ -235,7 +235,7 @@ html, body, *, *::before, *::after { cursor: none !important; }
 .cursor-outer {
   position: fixed;
   top: 0; left: 0;
-  width: 38px; height: 38px;
+  width: 26px; height: 26px;
   border: 1.5px solid #00ff00;
   border-radius: 50%;
   pointer-events: none;
@@ -244,7 +244,7 @@ html, body, *, *::before, *::after { cursor: none !important; }
   will-change: transform;
 }
 .cursor-inner.hovered { width: 14px; height: 14px; background: #009900; }
-.cursor-outer.hovered { width: 54px; height: 54px; border-color: #00ff00; opacity: 0.7; }
+.cursor-outer.hovered { width: 38px; height: 38px; border-color: #00ff00; opacity: 0.7; }
 
 /* Click ripple — expands from inner radius out past outer ring, then fades */
 .cursor-ripple {
@@ -261,8 +261,8 @@ html, body, *, *::before, *::after { cursor: none !important; }
 
 @keyframes cursor-ripple {
   0%   { width: 10px;  height: 10px;  opacity: 1;   border-color: #00ff00; }
-  40%  { width: 38px;  height: 38px;  opacity: 0.7; border-color: #00ff00; }
-  100% { width: 56px;  height: 56px;  opacity: 0;   border-color: #006600; }
+  40%  { width: 26px;  height: 26px;  opacity: 0.7; border-color: #00ff00; }
+  100% { width: 42px;  height: 42px;  opacity: 0;   border-color: #006600; }
 }
 
 @media (hover: none) { .cursor-inner, .cursor-outer, .cursor-ripple { display: none; } }
